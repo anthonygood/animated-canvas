@@ -1,4 +1,5 @@
 const stateWithAnimation = require('./state-with-animation');
+const getTween           = require('./get-tween');
 
 const body = document.querySelector('body');
 body.style.backgroundColor = 'purple';
@@ -20,3 +21,18 @@ ctx.fillRect(
     CANVAS_WIDTH,
     CANVAS_HEIGHT
 );
+
+const animate = () => {
+    console.clear();
+    const keys = Object.keys(stateWithAnimation);
+    const tweens = keys.map(
+        key => getTween(stateWithAnimation[key])
+    );
+    console.log(
+        tweens.join(' - ')
+    );
+
+    requestAnimationFrame(animate);
+};
+
+requestAnimationFrame(animate);
