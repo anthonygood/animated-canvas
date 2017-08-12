@@ -6,7 +6,7 @@ const getTween = (
     timeNow = (new Date()).getTime()
 ) => {
   // If the clock has run down, the animation value should be set to the actual value
-  if (valueWithMetaData.resolveBy <= timeNow) {
+  if (valueWithMetaData.timeEnd <= timeNow) {
     return valueWithMetaData.value;
   }
 

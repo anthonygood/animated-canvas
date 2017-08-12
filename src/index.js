@@ -1,11 +1,17 @@
+const Rx = require('rxjs/Rx');
+const R = require('ramda');
+
 const stateWithAnimation = require('./state-with-animation');
-const getTween           = require('./get-tween');
+const drawLine           = require('./draw-line');
+
+const {
+    CANVAS_HEIGHT,
+    CANVAS_WIDTH,
+    BACKGROUND_PRIMARY_COLOUR
+} = require('./constants');
 
 const body = document.querySelector('body');
 body.style.backgroundColor = 'purple';
-
-const CANVAS_HEIGHT = 600;
-const CANVAS_WIDTH = 600;
 
 const canvas = document.createElement('canvas');
 canvas.width = CANVAS_WIDTH;
@@ -14,23 +20,25 @@ canvas.height = CANVAS_HEIGHT;
 document.querySelector('body').appendChild(canvas);
 
 ctx = canvas.getContext('2d');
-ctx.fillStyle = 'white';
-ctx.fillRect(
-    0,
-    0,
-    CANVAS_WIDTH,
-    CANVAS_HEIGHT
+ctx.fillStyle = BACKGROUND_PRIMARY_COLOUR;
+
+const drawLineToDataPoint = R.curry(drawLine)(
+    ctx,
+    400, // x-origin
+    400, // y-origin
 );
 
+const clearCanvas = ctx => {
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+};
+
 const animate = () => {
-    console.clear();
+    clearCanvas(ctx);
+
     const keys = Object.keys(stateWithAnimation);
-    const tweens = keys.map(
-        key => getTween(stateWithAnimation[key])
-    );
-    console.log(
-        tweens.join(' - ')
-    );
+    const data = keys.map(key => stateWithAnimation[key]);
+
+    data.forEach(drawLineToDataPoint);
 
     requestAnimationFrame(animate);
 };
