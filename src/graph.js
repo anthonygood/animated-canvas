@@ -12,16 +12,11 @@ const R = require('ramda')
 //    }]
 // Node values can be anything.
 
-const newGraph = graph => graph || []
-const createId = graph => graph.length
-const isNodeConnectedTo = (otherNodeId, node) => ~node.connectedTo.indexOf(otherNodeId)
+const newGraph  = graph => graph || []
+const newNodeId = graph => graph.length
+const isNodeConnectedTo = (otherNodeId, node) =>
+    ~node.connectedTo.indexOf(otherNodeId)
 
-const addNode = (node, graph) => {
-    const nodeId = createId(graph)
-
-    const newGraph = graph.concat([node])
-
-}
 
 const getConnectedNodes = (nodeId, graph) => {
     const isConnected = R.curry(isNodeConnectedTo)(nodeId)
@@ -29,14 +24,16 @@ const getConnectedNodes = (nodeId, graph) => {
     return graph.filter(isConnected)
 }
 
-const addConnectedNode = (graph, nodeValue) => graph.concat({
-    id: createId(graph),
-    value: nodeValue,
-    connectedTo: [graph.length - 1]
-})
+const addConnectedNodes = (graph, ...nodeValues) => graph.concat(
+    nodeValues.map((value, index) => ({
+        id: newNodeId(graph) + index,
+        connectedTo: [graph.length - 1],
+        value
+    }))
+)
 
 module.exports = {
     newGraph,
     getConnectedNodes,
-    addConnectedNode,
+    addConnectedNodes
 }

@@ -2,7 +2,7 @@ import test from 'ava';
 
 import {
     getConnectedNodes,
-    addConnectedNode
+    addConnectedNodes
 } from './graph';
 
 test.beforeEach(t => {
@@ -53,7 +53,7 @@ test('getConnectedNodes returns the edges for a given node', t => {
     )
 })
 
-test('addConnectedNode adds a node connected to last node', t => {
+test('addConnectedNodes adds a node connected to last node', t => {
     // A ... thing!
     //   A
     //  / \
@@ -66,7 +66,7 @@ test('addConnectedNode adds a node connected to last node', t => {
         connectedTo: [2]
     })
 
-    const newGraph = addConnectedNode(t.context.graph, "d")
+    const newGraph = addConnectedNodes(t.context.graph, "d")
 
     t.deepEqual(
         newGraph,
@@ -74,4 +74,33 @@ test('addConnectedNode adds a node connected to last node', t => {
     )
 })
 
-// test('', t => {})
+test('addConnectedNodes adds multiple nodes connected to last node', t => {
+    // A ... thing!
+    //   A
+    //  / \
+    // B - C
+    //    /|\
+    //   D E F
+    const expectedGraph = t.context.graph.concat([{
+        value: "d",
+        id: 3,
+        connectedTo: [2]
+    },
+    {
+        value: "e",
+        id: 4,
+        connectedTo: [2]
+    },
+    {
+        value: "f",
+        id: 5,
+        connectedTo: [2]
+    }])
+
+    const newGraph = addConnectedNodes(t.context.graph, "d", "e", "f")
+
+    t.deepEqual(
+        newGraph,
+        expectedGraph
+    )
+})
