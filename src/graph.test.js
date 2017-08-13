@@ -2,7 +2,8 @@ import test from 'ava';
 
 import {
     getConnectedNodes,
-    addConnectedNodes
+    addConnectedNodes,
+    mapRows
 } from './graph';
 
 test.beforeEach(t => {
@@ -109,5 +110,19 @@ test('addConnectedNodes adds multiple nodes connected to last node', t => {
     t.deepEqual(
         newGraph,
         expectedGraph
+    )
+})
+
+test('mapRows yields every row of nodes of the graph', t => {
+    const expected = [1, 2]
+
+    const actual = mapRows(
+        t.context.graph,
+        row => row.length
+    )
+
+    t.deepEqual(
+        actual,
+        expected
     )
 })

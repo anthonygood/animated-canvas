@@ -35,8 +35,24 @@ const addConnectedNodes = (graph, ...nodeValues) => graph.concat(
     }))
 )
 
+const yDepth   = node => node.yDepth
+const isOnRow  = (yDepth, node) => node.yDepth === yDepth
+const isUnique = (node, index, array) => array.indexOf(node) === index
+
+const mapRows = (graph, fn) => {
+    const rows = graph.map(yDepth).filter(isUnique)
+
+    return rows.map(row => {
+        const isOnThisRow = R.curry(isOnRow)(row)
+        const nodes = graph.filter(isOnThisRow)
+
+        return fn(nodes)
+    })
+}
+
 module.exports = {
     newGraph,
     getConnectedNodes,
-    addConnectedNodes
+    addConnectedNodes,
+    mapRows
 }
