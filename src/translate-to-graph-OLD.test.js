@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import translateToGraph from './translate-to-graph';
+import translateToGraph from './translate-to-graph-OLD';
 
 test('translates simple object of 2 values to 2 nodes', t => {
     const inputData = { a: 1, b: 2 };
@@ -45,11 +45,6 @@ test('can plot nodes to origin', t => {
         5,    // distanceX,
         20,   // distanceY
         inputData
-    );
-
-    console.log(
-        expected,
-        output
     );
 
     t.deepEqual(
