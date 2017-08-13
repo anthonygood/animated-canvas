@@ -4,11 +4,13 @@ const R = require('ramda')
 //    [{
 //        value: { a: "foo" },
 //        id: 0,
-//        connectedTo: [2]
+//        connectedTo: [2],
+//        yDepth: 0
 //    },{
 //        value: { b: "bar" },
 //        id: 1,
-//        connectedTo: [1]
+//        connectedTo: [1],
+//        yDepth: 1
 //    }]
 // Node values can be anything.
 
@@ -28,6 +30,7 @@ const addConnectedNodes = (graph, ...nodeValues) => graph.concat(
     nodeValues.map((value, index) => ({
         id: newNodeId(graph) + index,
         connectedTo: [graph.length - 1],
+        yDepth: graph[graph.length-1].yDepth + 1,
         value
     }))
 )

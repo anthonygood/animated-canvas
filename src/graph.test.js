@@ -14,17 +14,20 @@ test.beforeEach(t => {
         {
             value: "a",
             id: 0,
-            connectedTo: [1,2]
+            connectedTo: [1,2],
+            yDepth: 0
         },
         {
             value: "b",
             id: 1,
-            connectedTo: [0,2] 
+            connectedTo: [0,2],
+            yDepth: 1
         },
         {
             value: "c",
             id: 2,
-            connectedTo: [0,1]
+            connectedTo: [0,1],
+            yDepth: 1
         }
     ]
 })
@@ -63,7 +66,8 @@ test('addConnectedNodes adds a node connected to last node', t => {
     const expectedGraph = t.context.graph.concat({
         value: "d",
         id: 3,
-        connectedTo: [2]
+        connectedTo: [2],
+        yDepth: 2
     })
 
     const newGraph = addConnectedNodes(t.context.graph, "d")
@@ -84,17 +88,20 @@ test('addConnectedNodes adds multiple nodes connected to last node', t => {
     const expectedGraph = t.context.graph.concat([{
         value: "d",
         id: 3,
-        connectedTo: [2]
+        connectedTo: [2],
+        yDepth: 2
     },
     {
         value: "e",
         id: 4,
-        connectedTo: [2]
+        connectedTo: [2],
+        yDepth: 2
     },
     {
         value: "f",
         id: 5,
-        connectedTo: [2]
+        connectedTo: [2],
+        yDepth: 2
     }])
 
     const newGraph = addConnectedNodes(t.context.graph, "d", "e", "f")
