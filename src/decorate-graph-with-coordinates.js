@@ -1,3 +1,10 @@
+const R = require('ramda')
+
+const {
+    getConnectedNodes,
+    mapRows
+} = require('./graph')
+
 /**
  * A function to decorate a graph's nodes with co-ordinates for rendering.
  * @param {object} options:
@@ -28,27 +35,65 @@
  *       ...
  * }]
  */
+// const decorateGraphWithCoordinates = (
+//     {
+//         originX = 0,
+//         originY = 0,
+//         offsetX = 0,
+//         offsetY = 100,
+//         marginX = 50,
+//         marginY = 0
+//     },
+//     nodeArray
+// ) => {
+
+//     return nodeArray.map((node, index) => {
+//         const x = originX + (offsetX * index)
+//         const y = originY + (offsetY * index)
+
+//         return Object.assign(
+//             {},
+//             node,
+//             { x, y }
+//         )
+//     })
+// }
+
 const decorateGraphWithCoordinates = (
     {
-        originX,
-        originY,
-        offsetX,
-        offsetY,
-        marginX,
-        marginY
+        originX = 0,
+        originY = 0,
+        offsetX = 0,
+        offsetY = 100,
+        marginX = 50,
+        marginY = 0
     },
-    nodeArray
+    nodeArray,
+    index,
+    visitedNodes
 ) => {
-    return nodeArray.map((node, index) => {
-        const x = originX + (offsetX * index)
-        const y = originY + (offsetY * index)
+    const decoratedNodes = mapRows(nodeArray, (row, rowIndex) => {
+        return row.map((node, nodeIndex) => {
 
-        return Object.assign(
-            {},
-            node,
-            { x, y }
-        )
-    });
-};
+            const margins = row.length - 1
+            const maxLeft = (originX - (margins * marginX) / 2)
 
-module.exports = decorateGraphWithCoordinates;
+            const thisOffsetX = offsetX * rowIndex
+            const thisOffsetY = offsetY * rowIndex
+
+            const x = thisOffsetX + (originX + maxLeft + (marginX * nodeIndex))
+            const y = (originY + (thisOffsetY * rowIndex))
+
+
+            return Object.assign(
+                {},
+                node,
+                { x, y }
+            )
+        })
+    })
+
+    return R.flatten(decoratedNodes)
+}
+
+module.exports = { decorateGraphWithCoordinates }

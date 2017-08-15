@@ -42,11 +42,11 @@ const isUnique = (node, index, array) => array.indexOf(node) === index
 const mapRows = (graph, fn) => {
     const rows = graph.map(yDepth).filter(isUnique)
 
-    return rows.map(row => {
+    return rows.map((row, index) => {
         const isOnThisRow = R.curry(isOnRow)(row)
         const nodes = graph.filter(isOnThisRow)
 
-        return fn(nodes)
+        return fn(nodes, index, row)
     })
 }
 
