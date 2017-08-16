@@ -52,13 +52,13 @@ const decorateGraphWithCoordinates = (
         return row.map((node, nodeIndex) => {
 
             const margins = row.length - 1
-            const maxLeft = (originX - (margins * marginX) / 2)
+            const maxLeft = - (margins * marginX) / 2
 
             const thisOffsetX = offsetX * rowIndex
             const thisOffsetY = offsetY * rowIndex
 
-            const x = thisOffsetX + (maxLeft + (marginX * nodeIndex))
-            const y = (originY + (thisOffsetY * rowIndex))
+            const x = originX + thisOffsetX + (maxLeft + (marginX * nodeIndex))
+            const y = (originY + thisOffsetY)
 
             return Object.assign(
                 {},

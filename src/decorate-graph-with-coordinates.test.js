@@ -13,6 +13,14 @@ test.beforeEach(t => {
         { value: 'b', id: 1, connectedTo: [0,2], yDepth: 1 },
         { value: 'c', id: 2, connectedTo: [0,1], yDepth: 1 }
     ]
+
+    t.context.tree = [
+        { value: 'a', id: 0, connectedTo: [1,2],     yDepth: 0 },
+        { value: 'b', id: 1, connectedTo: [0,2],     yDepth: 1 },
+        { value: 'c', id: 2, connectedTo: [0,1,3,4], yDepth: 1 },
+        { value: 'd', id: 3, connectedTo: [2],       yDepth: 2 },
+        { value: 'e', id: 4, connectedTo: [2],       yDepth: 2 },
+    ]
 })
 
 test('decorates simple graph of 2 nodes', t => {
@@ -79,11 +87,11 @@ test('decorates more complex graph of 3 connected nodes', t => {
         y: 0,
     },{
         value: 'b', id: 1, connectedTo: [0,2], yDepth: 1,
-        x: -25, //
+        x: -25,
         y: 100
     },{
         value: 'c', id: 2, connectedTo: [0,1], yDepth: 1,
-        x: 25, // (50 / 2) + 25
+        x: 25, // (0 - 50/2) + (50 * 1) // maxLeft + margin * yIndex
         y: 100
     }];
 
@@ -95,6 +103,49 @@ test('decorates more complex graph of 3 connected nodes', t => {
             offsetY
         },
         t.context.triangle
+    );
+
+    t.deepEqual(output, expected);
+});
+
+test('decorates tree of 5 connected nodes', t => {
+    const originX = 1000 // big origin
+    const originY = 1000 // ditto
+    const offsetX = 10   // slight right tendency
+    const offsetY = 90   // downward graph
+    const marginX = 20   // expect X-adjacent nodes to be 20 apart
+
+    const expected =  [{
+        value: 'a', id: 0, connectedTo: [1,2], yDepth: 0,
+        x: 1000,
+        y: 1000,
+    },{
+        value: 'b', id: 1, connectedTo: [0,2], yDepth: 1,
+        x: 1000,
+        y: 1090
+    },{
+        value: 'c', id: 2, connectedTo: [0,1,3,4], yDepth: 1,
+        x: 1020,
+        y: 1090
+    },{
+        value: 'd', id: 3, connectedTo: [2], yDepth: 2,
+        x: 1010,
+        y: 1180
+    },{
+        value: 'e', id: 4, connectedTo: [2], yDepth: 2,
+        x: 1030,
+        y: 1180
+    }];
+
+    const output = decorateGraphWithCoordinates(
+        {
+            originX,
+            originY,
+            offsetX,
+            offsetY,
+            marginX
+        },
+        t.context.tree
     );
 
     t.deepEqual(output, expected);
