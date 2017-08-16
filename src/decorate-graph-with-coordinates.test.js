@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { decorateGraphWithCoordinates } from './decorate-graph-with-coordinates'
+import decorateGraphWithCoordinates from './decorate-graph-with-coordinates'
 
 test.beforeEach(t => {
     t.context.line = [
