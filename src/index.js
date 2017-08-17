@@ -9,7 +9,7 @@ const R = require('ramda')
 
 const stateWithAnimation = require('./state-with-animation')
 const drawLine           = require('./draw-line')
-const renderNodes        = require('./render-graph')
+const renderNodes        = require('./render/render-graph')
 const graph              = require('./fixtures/graph')
 
 const body = document.querySelector('body')
