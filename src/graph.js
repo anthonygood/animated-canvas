@@ -20,7 +20,7 @@ const isNodeConnectedTo = (otherNodeId, node) =>
     ~node.connectedTo.indexOf(otherNodeId)
 
 
-const getConnectedNodes = (nodeId, graph) => {
+const getConnectedNodes = (graph, nodeId) => {
     const isConnected = R.curry(isNodeConnectedTo)(nodeId)
 
     return graph.filter(isConnected)

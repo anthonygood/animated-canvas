@@ -17,15 +17,14 @@ const drawLine = (
     const tween = getTween(data);
 
     if (tween === data.value) {
-        console.log(`${tween} : ${data.value}`);
         ctx.strokeStyle = STROKE_SUCCESS_COLOUR;
     }
 
     ctx.lineTo(
         data.initValue,
         tween
-    ); 
-    
+    );
+
     ctx.stroke();
     ctx.closePath();
 };

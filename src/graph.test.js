@@ -34,25 +34,18 @@ test.beforeEach(t => {
 })
 
 test('getConnectedNodes returns the edges for a given node', t => {
-    const expectedNodes = [
-        t.context.graph[1],
-        t.context.graph[2]
-    ]
-
-    const actualNodes = getConnectedNodes(0, t.context.graph)
-
     t.deepEqual(
-        getConnectedNodes(0, t.context.graph),
+        getConnectedNodes(t.context.graph, 0),
         [t.context.graph[1], t.context.graph[2]]
     )
 
     t.deepEqual(
-        getConnectedNodes(1, t.context.graph),
+        getConnectedNodes(t.context.graph, 1),
         [t.context.graph[0], t.context.graph[2]]
     )
 
     t.deepEqual(
-        getConnectedNodes(2, t.context.graph),
+        getConnectedNodes(t.context.graph, 2),
         [t.context.graph[0], t.context.graph[1]]
     )
 })
