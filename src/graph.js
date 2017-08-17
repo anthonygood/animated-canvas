@@ -29,8 +29,8 @@ const getConnectedNodes = (graph, nodeId) => {
 const addConnectedNodes = (graph, ...nodeValues) => graph.concat(
     nodeValues.map((value, index) => ({
         id: newNodeId(graph) + index,
-        connectedTo: [graph.length - 1],
-        yDepth: graph[graph.length-1].yDepth + 1,
+        connectedTo: [ graph.length ? graph.length - 1 : null ],
+        yDepth: graph.length ? graph[graph.length-1].yDepth + 1 : 0,
         value
     }))
 )
