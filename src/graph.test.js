@@ -50,25 +50,52 @@ test('getConnectedNodes returns the edges for a given node', t => {
     )
 })
 
-test('addConnectedNodes adds a node connected to last node', t => {
+test('addConnectedNodes adds a node connected to previously last node', t => {
     // A ... thing!
     //   A
     //  / \
     // B - C
     //     |
     //     D
-    const expectedGraph = t.context.graph.concat({
+    const expectedLastNode = {
         value: "d",
         id: 3,
         connectedTo: [2],
         yDepth: 2
-    })
+    }
+
+    const newGraph = addConnectedNodes(t.context.graph, "d")
+
+    t.is(
+        newGraph.length,
+        4
+    )
+
+    t.deepEqual(
+        newGraph[3],
+        expectedLastNode
+    )
+})
+
+test('addConnectedNodes adds connects penultimate node to the new node', t => {
+    // A ... thing!
+    //   A
+    //  / \
+    // B - C
+    //     |
+    //     D
+    const expectedPenultimateNode = {
+        value: "c",
+        id: 2,
+        connectedTo: [0,1,3],
+        yDepth: 1
+    }
 
     const newGraph = addConnectedNodes(t.context.graph, "d")
 
     t.deepEqual(
-        newGraph,
-        expectedGraph
+        newGraph[2],
+        expectedPenultimateNode
     )
 })
 
@@ -79,24 +106,37 @@ test('addConnectedNodes adds multiple nodes connected to last node', t => {
     // B - C
     //    /|\
     //   D E F
-    const expectedGraph = t.context.graph.concat([{
+    const expectedGraph = [{
+        value: "a",
+        id: 0,
+        connectedTo: [1,2],
+        yDepth: 0
+    },{
+        value: "b",
+        id: 1,
+        connectedTo: [0,2],
+        yDepth: 1
+    },{
+        value: "c",
+        id: 2,
+        connectedTo: [0,1,3,4,5],
+        yDepth: 1
+    },{
         value: "d",
         id: 3,
         connectedTo: [2],
         yDepth: 2
-    },
-    {
+    },{
         value: "e",
         id: 4,
         connectedTo: [2],
         yDepth: 2
-    },
-    {
+    },{
         value: "f",
         id: 5,
         connectedTo: [2],
         yDepth: 2
-    }])
+    }]
 
     const newGraph = addConnectedNodes(t.context.graph, "d", "e", "f")
 
