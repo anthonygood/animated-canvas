@@ -21,13 +21,13 @@ canvas.height = CANVAS_HEIGHT
 
 document.querySelector('body').appendChild(canvas)
 
-ctx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d')
 ctx.fillStyle = BACKGROUND_PRIMARY_COLOUR
 
 const drawLineToDataPoint = R.curry(drawLine)(
     ctx,
     400, // x-origin
-    400, // y-origin
+    400 // y-origin
 )
 
 const clearCanvas = ctx => {

@@ -14,11 +14,17 @@ const R = require('ramda')
 //    }]
 // Node values can be anything.
 
-const newGraph  = graph => graph || []
-const newNodeId = graph => graph.length
-const isNodeConnectedTo = (otherNodeId, node) =>
-    ~node.connectedTo.indexOf(otherNodeId)
+const {
+    isOnRow,
+    isUnique,
+    newGraph,
+    newNodeId,
+    isNodeConnectedTo,
+    yDepth
+} = require('./utils')
 
+const forEach = require('./forEach')
+const reduce  = require('./reduce')
 
 const getConnectedNodes = (graph, nodeId) => {
     const isConnected = R.curry(isNodeConnectedTo)(nodeId)
@@ -29,11 +35,13 @@ const getConnectedNodes = (graph, nodeId) => {
 const nodeForValueAndIndex = (graph, value, index) => ({
     value,
     id:          newNodeId(graph) + index,
-    connectedTo: [ graph.length ? graph.length - 1 : null ],
+    connectedTo: graph.length ? [graph.length - 1] : [],
     yDepth:      graph.length ? graph[graph.length-1].yDepth + 1 : 0,
 })
 
 const connectNodeTo = (node, ...otherNodes) => {
+    if(!node) { return [] }
+
     const otherNodeIdsToConnect = otherNodes.map(node => node.id)
     const newConnectedNodeIds   = node.connectedTo.concat(otherNodeIdsToConnect)
 
@@ -60,14 +68,10 @@ const addConnectedNodes = (graph, ...nodeValues) => {
     )
 }
 
-const yDepth   = node => node.yDepth
-const isOnRow  = (yDepth, node) => node.yDepth === yDepth
-const isUnique = (node, index, array) => array.indexOf(node) === index
-
 const mapRows = (graph, fn) => {
-    const rows = graph.map(yDepth).filter(isUnique)
+    const rowIndices = graph.map(yDepth).filter(isUnique)
 
-    return rows.map((row, index) => {
+    return rowIndices.map((row, index) => {
         const isOnThisRow = R.curry(isOnRow)(row)
         const nodes = graph.filter(isOnThisRow)
 
@@ -75,9 +79,22 @@ const mapRows = (graph, fn) => {
     })
 }
 
+const map = (graph, fn) => {
+    const mapped = mapRows(graph, (row, rowIndex) => {
+        return row.map((node, nodeIndexInRow) => {
+            return fn(node, nodeIndexInRow, row, rowIndex)
+        })
+    })
+
+    return R.flatten(mapped)
+}
+
 module.exports = {
     newGraph,
     getConnectedNodes,
     addConnectedNodes,
-    mapRows
+    mapRows,
+    map,
+    forEach,
+    reduce
 }

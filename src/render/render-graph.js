@@ -1,7 +1,7 @@
 const {
-    CIRCLE_RADIUS,
     STROKE_PRIMARY_COLOUR,
-    FILL_PRIMARY_COLOUR
+    FILL_PRIMARY_COLOUR,
+    LINE_WIDTH
 } = require('../constants')
 
 const R = require('ramda')
@@ -41,7 +41,8 @@ const renderNodes = (context, graph) => {
 
 const renderEdges = (context, graph) => {
     context.strokeStyle = STROKE_PRIMARY_COLOUR || 'black'
-    context.fillStyle = FILL_PRIMARY_COLOUR || 'black'
+    context.fillStyle   = FILL_PRIMARY_COLOUR   || 'black'
+    context.lineWidth   = LINE_WIDTH            || 1
 
     const renderRowEdgesOnContext = R.curry(renderEdgesOnRow)(context, graph)
     const eachRow = R.curry(mapRows)(graph)

@@ -3,7 +3,10 @@ import test from 'ava';
 import {
     getConnectedNodes,
     addConnectedNodes,
-    mapRows
+    mapRows,
+    map,
+    forEach,
+    reduce
 } from './graph';
 
 test.beforeEach(t => {
@@ -159,3 +162,83 @@ test('mapRows yields every row of nodes of the graph', t => {
         expected
     )
 })
+
+test('map yields every node of graph and returns 1-dimensional array', t => {
+    const expected = [0,1,2]
+
+    const actual = map(
+        t.context.graph,
+        node => node.id
+    )
+
+    t.deepEqual(
+        actual,
+        expected
+    )
+})
+
+test('map yields node, nodeIndexInRow, row and rowIndex', t => {
+    const expectedNodeIndicesInRows = [0,0,1]
+    const expectedRowIndices = [0,1,1]
+
+    const actualNodeIndicesInRows = map(
+        t.context.graph,
+        (node, nodeIndex) => nodeIndex
+    )
+
+    const actualRowIndices = map(
+        t.context.graph,
+        (node, nodeIndex, row, rowIndex) => rowIndex
+    )
+
+    t.deepEqual(
+        actualNodeIndicesInRows,
+        expectedNodeIndicesInRows
+    )
+
+    t.deepEqual(
+        actualRowIndices,
+        expectedRowIndices
+    )
+})
+
+test('forEach performs a function for each node', t => {
+    let counter = 0
+    const count = () => counter++
+
+    forEach(
+        t.context.graph,
+        count
+    )
+
+    t.is(
+        counter,
+        t.context.graph.length
+    )
+})
+
+test('reduce can reduce graph to new value', t => {
+    const reducer = (accumulator, node, nodeIndex, rowIndex) => {
+        return Object.assign({}, accumulator, { [node.value] : node.id })
+    }
+
+    const reduced = reduce(
+        t.context.graph,
+        reducer,
+        {}
+    )
+
+    const expected = {
+        a: 0,
+        b: 1,
+        c: 2
+    }
+
+    t.deepEqual(
+        reduced,
+        expected
+    )
+})
+
+
+
