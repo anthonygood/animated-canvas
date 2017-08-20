@@ -71,34 +71,45 @@ const decorateGraphWithCoordinates = (
         originY = 0,
         offsetX = 0,
         offsetY = 100,
-        marginX = 50,
-        marginY = 0
+        marginX = 50
     },
-    nodeArray,
-    index,
-    visitedNodes
+    nodeArray
 ) => {
-    const decoratedNodes = mapRows(nodeArray, (row, rowIndex) => {
-        return row.map((node, nodeIndex) => {
+    const decorate = R.curry(decorateNode)(
+        { originX, originY, offsetX, offsetY, marginX }
+    )
 
-            const margins = row.length - 1
-            const maxLeft = - (margins * marginX) / 2
-
-            const thisOffsetX = offsetX * rowIndex
-            const thisOffsetY = offsetY * rowIndex
-
-            const x = originX + thisOffsetX + (maxLeft + (marginX * nodeIndex))
-            const y = (originY + thisOffsetY)
-
-            return Object.assign(
-                {},
-                node,
-                { x, y }
-            )
-        })
-    })
-
-    return R.flatten(decoratedNodes)
+    return map(nodeArray, decorate)
 }
 
-module.exports = decorateGraphWithCoordinates
+const applyParentalOffsets = (
+    {
+        originX = 0
+    },
+    nodeArray
+) => {
+    return reduce(nodeArray, (graph, node) => {
+        const connected = getConnectedNodes(graph, node.id)
+        const parent    = connected.filter(connectedNode => connectedNode.id < node.id)[0]
+
+        if (!parent) { return graph.concat(node) }
+
+        const parentOffset = parent.x - originX
+        const thisNode = Object.assign(
+            {},
+            node,
+            { x: node.x + parentOffset }
+        )
+
+        return graph.concat(thisNode)
+    }, [])
+}
+
+const decorateWithOffsets = (options, nodeArray) => {
+    const decorated = decorateGraphWithCoordinates(options, nodeArray)
+    const offset    = applyParentalOffsets(options, decorated)
+
+    return offset
+}
+
+module.exports = decorateWithOffsets
