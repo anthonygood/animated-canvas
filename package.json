@@ -19,5 +19,10 @@
   "dependencies": {
     "ramda": "^0.24.1",
     "rxjs": "^5.4.3"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env" : {"node": true },
+    "parserOptions": { "ecmaVersion": 6 }
   }
 }
