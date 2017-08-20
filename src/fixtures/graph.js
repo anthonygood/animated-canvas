@@ -1,21 +1,18 @@
-const R = require('ramda')
-
-const {
-    newGraph,
-    addConnectedNodes
-} = require('../graph')
+const { addConnectedNodes } = require('../graph')
 const decorateGraphWithCoordinates = require('../decorate-graph-with-coordinates')
 
+let graph
 graph = addConnectedNodes([], 'a')
-graph = addConnectedNodes(graph, 'b', 'c')
-graph = addConnectedNodes(graph, 'd', 'e', 'f')
-graph = addConnectedNodes(graph, 'g')
-graph = addConnectedNodes(graph, 'h', 'i', 'j')
-graph = addConnectedNodes(graph, 'k', 'l', 'm', 'n')
+graph = addConnectedNodes(graph, 'b')
+graph = addConnectedNodes(graph, 'c', 'd')
+graph = addConnectedNodes(graph, 'e', 'f')
+graph = addConnectedNodes(graph, 'g', 'h')
+graph = addConnectedNodes(graph, 'i', 'j')
+graph = addConnectedNodes(graph, 'k', 'l')
 graph = decorateGraphWithCoordinates(
     {
-        originX: 500,
-        originY: 25,
+        originX: 300,
+        originY: 100,
         offsetX: 0,
         offsetY: 100,
         marginX: 50
