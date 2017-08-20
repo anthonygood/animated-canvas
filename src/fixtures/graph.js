@@ -1,5 +1,5 @@
 const { addConnectedNodes } = require('../graph')
-const decorateGraphWithCoordinates = require('../decorate-graph-with-coordinates')
+const decorateGraphWithCoordinates = require('../graph-to-2d')
 
 let graph
 graph = addConnectedNodes([], 'a')
