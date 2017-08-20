@@ -1,4 +1,5 @@
 const {
+    BACKGROUND_PRIMARY_COLOUR,
     STROKE_PRIMARY_COLOUR,
     FILL_PRIMARY_COLOUR,
     LINE_WIDTH
@@ -40,10 +41,6 @@ const renderNodes = (context, graph) => {
 };
 
 const renderEdges = (context, graph) => {
-    context.strokeStyle = STROKE_PRIMARY_COLOUR || 'black'
-    context.fillStyle   = FILL_PRIMARY_COLOUR   || 'black'
-    context.lineWidth   = LINE_WIDTH            || 1
-
     const renderRowEdgesOnContext = R.curry(renderEdgesOnRow)(context, graph)
     const eachRow = R.curry(mapRows)(graph)
 
@@ -51,6 +48,11 @@ const renderEdges = (context, graph) => {
 }
 
 const renderGraph = (context, graph) => {
+    context.fillStyle   = BACKGROUND_PRIMARY_COLOUR
+    context.strokeStyle = STROKE_PRIMARY_COLOUR || 'black'
+    context.fillStyle   = FILL_PRIMARY_COLOUR   || 'black'
+    context.lineWidth   = LINE_WIDTH            || 1
+
     renderEdges(context, graph)
     renderNodes(context, graph)
 }

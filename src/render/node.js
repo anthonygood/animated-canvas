@@ -1,6 +1,6 @@
 const {
     CIRCLE_RADIUS,
-    STROKE_SECONDARY_COLOUR
+    BACKGROUND_PRIMARY_COLOUR
 } = require('../constants')
 
 const renderNode = (context, graph, node) => {
@@ -17,9 +17,10 @@ const renderNode = (context, graph, node) => {
     context.fill()
     context.closePath()
 
+    context.textAlign = 'center'
     context.font = '24px sans-serif'
-    context.fillStyle = STROKE_SECONDARY_COLOUR
-    context.fillText(node.value, node.x - 6, node.y + 6)
+    context.fillStyle = BACKGROUND_PRIMARY_COLOUR
+    context.fillText(node.value, node.x, node.y + 7)
     context.fillStyle = fill
 }
 
