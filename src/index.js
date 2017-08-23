@@ -9,6 +9,9 @@ const { addConnectedNodes } = require('./graph')
 const renderNodes = require('./render/render-graph')
 const decorateGraphWithCoordinates = require('./graph-to-2d/')
 // const graph       = require('./fixtures/graph')
+const decorateGraphForAnimation = require('./graph-to-animation/decorate')
+const getTweenGraph = require('./graph-to-animation/get-tween-graph')
+const { timeNow, secondsFromNow } = require('./utils/time')
 
 const body = document.querySelector('body')
 // body.style.backgroundColor = 'purple'
@@ -21,23 +24,16 @@ document.querySelector('body').appendChild(canvas)
 
 const ctx = canvas.getContext('2d')
 
-// renderNodes(ctx, graph)
-
 const options = {
     originX: 500,
     originY: 30,
     offsetX: 0,
-    offsetY: 100,
+    offsetY: 125,
     marginX: 100
 }
 
 const decorate = R.curry(decorateGraphWithCoordinates)(options)
 const render   = R.curry(renderNodes)(ctx)
-
-const decorateAndRender = (graph) => R.pipe(
-    decorate,
-    render
-)(graph)
 
 const graph1 = addConnectedNodes([], 'a')
 const graph2 = addConnectedNodes(graph1, 'b')
@@ -53,14 +49,26 @@ const renderAGraph = (graphs, count = 0) => () => {
     decorateAndRender(graphs[count++])
 }
 
+const animationOptions = {
+    delayBetweenRows: 1000,
+    timeBegin: timeNow(),
+    timeEnd: secondsFromNow(5),
+    nodeDrawTime: 500
+}
+
+const decorateAnimate = R.curry(decorateGraphForAnimation)(animationOptions)
+
+const decorateAndRender = (graph) => R.pipe(
+    decorate,
+    decorateAnimate,
+    getTweenGraph,
+    render
+)(graph)
+
 setInterval(
-    renderAGraph([
-        graph1,
-        graph2,
-        graph3,
-        graph4,
-        graph5,
-        graph6
-    ]),
-    1000
+    () => {
+        ctx.clearRect(0, 0, 1000, 1000)
+        decorateAndRender(graph6)
+    },
+    100
 )

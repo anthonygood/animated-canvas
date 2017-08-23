@@ -13,7 +13,8 @@ const getTween = (
   // equation for a line is:
   // y = mx + b (where b is the y intersect)
   //            (ie. where b is the initial animationValue)
-  const [y1, y2] = [valueWithMetaData.initValue,  valueWithMetaData.value ];
+  const [y1, y2] = [valueWithMetaData.initValue, valueWithMetaData.value  ];
+
   const [x1, x2] = [valueWithMetaData.timeBegin, valueWithMetaData.timeEnd];
   const slope = (y2 - y1) / (x2 - x1);
   const yIntersect = valueWithMetaData.initValue;

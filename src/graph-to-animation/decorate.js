@@ -1,6 +1,6 @@
 const R = require('ramda')
-const { timeNow, secondsFromNow } = require('../utils/time')
-const { reduce, getConnectedNodes } = require('../graph')
+const { timeNow, secondsFromNow    } = require('../utils/time')
+const { reduce,  getConnectedNodes } = require('../graph')
 
 const decorateNode = (
     {
@@ -15,21 +15,23 @@ const decorateNode = (
 ) => {
     const connected = getConnectedNodes(graph, node.id)
     const parent    = connected.filter(connectedNode => connectedNode.id < node.id)[0]
-    const parentX   = parent && parent.x
-    const parentY   = parent && parent.y
+    const parentX   = parent && parent.x && parent.x.value
+    const parentY   = parent && parent.y && parent.y.value
 
     const animationX = {
         value: node.x,
         initValue: parentX || node.x,
-        timeBegin: timeNow(),
-        timeEnd: secondsFromNow(1)
+        timeBegin,
+        timeEnd,
+        parent: node
     }
 
     const animationY = {
         value: node.y,
         initValue: parentY || node.y,
-        timeBegin: timeNow(),
-        timeEnd: secondsFromNow(1)
+        timeBegin,
+        timeEnd,
+        parent: node
     }
 
     return Object.assign(
