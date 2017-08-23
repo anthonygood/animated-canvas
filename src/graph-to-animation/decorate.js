@@ -7,7 +7,8 @@ const decorateNode = (
         delayBetweenRows = 1000,
         timeBegin        = timeNow(),
         timeEnd          = secondsFromNow(1),
-        nodeDrawTime     = 500
+        nodeDrawTime     = 500,
+        timePerRow,
     },
     node,
     rowIndex,
@@ -18,11 +19,13 @@ const decorateNode = (
     const parentX   = parent && parent.x && parent.x.value
     const parentY   = parent && parent.y && parent.y.value
 
+    const nodeTimeEnd =  timeBegin + (timePerRow * rowIndex+1)
+
     const animationX = {
         value: node.x,
         initValue: parentX || node.x,
         timeBegin,
-        timeEnd,
+        timeEnd: nodeTimeEnd,
         parent: node
     }
 
@@ -30,7 +33,7 @@ const decorateNode = (
         value: node.y,
         initValue: parentY || node.y,
         timeBegin,
-        timeEnd,
+        timeEnd: nodeTimeEnd,
         parent: node
     }
 
@@ -56,7 +59,15 @@ const decorate = (
     options,
     graph
 ) => {
-    const reducer = R.curry(decorator)(options)
+    const rowCount = Math.max(
+        ...graph.map(node => node.yDepth)
+    ) + 1
+
+    const timePerRow = (options.timeEnd - options.timeBegin) / rowCount
+
+    const nodeOptions = Object.assign({}, options, { timePerRow })
+
+    const reducer = R.curry(decorator)(nodeOptions)
     return reduce(graph, reducer, [])
 }
 
