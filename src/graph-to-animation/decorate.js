@@ -14,27 +14,29 @@ const decorateNode = (
     rowIndex,
     graph
 ) => {
+
     const connected = getConnectedNodes(graph, node.id)
     const parent    = connected.filter(connectedNode => connectedNode.id < node.id)[0]
     const parentX   = parent && parent.x && parent.x.value
     const parentY   = parent && parent.y && parent.y.value
 
-    const nodeTimeEnd =  timeBegin + (timePerRow * rowIndex+1)
+    const nodeTimeBegin = timeBegin + (timePerRow * rowIndex)
+    const nodeTimeEnd   = timeBegin + (timePerRow * (rowIndex+1))
 
     const animationX = {
         value: node.x,
         initValue: parentX || node.x,
-        timeBegin,
+        timeBegin: nodeTimeBegin,
         timeEnd: nodeTimeEnd,
-        parent: node
+        node
     }
 
     const animationY = {
         value: node.y,
         initValue: parentY || node.y,
-        timeBegin,
+        timeBegin: nodeTimeBegin,
         timeEnd: nodeTimeEnd,
-        parent: node
+        node
     }
 
     return Object.assign(

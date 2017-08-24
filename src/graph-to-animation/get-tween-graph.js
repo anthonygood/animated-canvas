@@ -7,6 +7,12 @@ const getTweenNode = (
     time,
     decoratedNode
 ) => {
+
+    // Don't include node before its timeBegin
+    if (decoratedNode.x.timeBegin > time) {
+        return null
+    }
+
     return Object.assign(
         {},
         decoratedNode,
@@ -24,7 +30,7 @@ const getTweenGraph = (
     const mapGraph = R.curry(map)(decoratedGraph)
     const getTween = R.curry(getTweenNode)(time)
 
-    return mapGraph(getTween)
+    return mapGraph(getTween).filter(node => node !== null)
 }
 
 module.exports = getTweenGraph
