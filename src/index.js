@@ -26,24 +26,46 @@ const ctx = canvas.getContext('2d')
 
 const options = {
     originX: 500,
-    originY: 30,
+    originY: 20,
     offsetX: 0,
-    offsetY: 125,
-    marginX: 100
+    offsetY: 3,
+    marginX: 5
 }
 
 const decorate = R.curry(decorateGraphWithCoordinates)(options)
 const render   = R.curry(renderNodes)(ctx)
 
-const graph1 = addConnectedNodes([], 'a')
-const graph2 = addConnectedNodes(graph1, 'b')
-const graph3 = addConnectedNodes(graph2, 'c', 'd', 'e')
-const graph4 = addConnectedNodes(graph3, 'f', 'g')
-const graph5 = addConnectedNodes(graph4, 'h')
-const graph6 = addConnectedNodes(graph5, 'i', 'j')
+const rand = max => Math.floor(
+    Math.random() * max
+) + 1
+
+const generateRandomGraph = () => {
+    const depth = 150
+
+    let graph = [],
+        i     = 0
+
+    for (i; i < depth; i++) {
+        let breadth
+
+        if (i) {
+            breadth = rand(50)
+        } else {
+            breadth = 1
+        }
+
+        const tokens = (new Array(breadth)).join('a')
+
+        graph = addConnectedNodes(graph, ...tokens)
+    }
+
+    return graph
+}
+
+let graph = { nodes: generateRandomGraph() }
 
 const getAnimationOptions = () => ({
-    delayBetweenRows: 1000,
+    delayBetweenRows: 100,
     timeBegin: timeNow(),
     timeEnd: secondsFromNow(5),
     nodeDrawTime: 500
@@ -61,19 +83,21 @@ const decorateAndRender = (graph) => R.pipe(
 )(graph)
 
 const drawFrame = () => {
-    ctx.clearRect(0, 0, 1000, 1000)
-    decorateAndRender(graph6)
+    // ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+    decorateAndRender(graph.nodes)
 }
 
+const DELAY_BEFORE_RESTART = 750
 const animate = () => {
-    if (timeNow() > optionsForAnimation.timeEnd + 500) {
+    if (timeNow() > optionsForAnimation.timeEnd + DELAY_BEFORE_RESTART) {
         const { timeBegin, timeEnd } = getAnimationOptions()
         optionsForAnimation.timeBegin = timeBegin
         optionsForAnimation.timeEnd = timeEnd
+        graph.nodes = generateRandomGraph()
     }
 
     drawFrame()
-    setTimeout(animate, 100)
+    requestAnimationFrame(animate)
 }
 
 animate()

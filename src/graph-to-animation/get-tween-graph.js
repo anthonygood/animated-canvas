@@ -7,9 +7,11 @@ const getTweenNode = (
     time,
     decoratedNode
 ) => {
+    const started  = decoratedNode.x.timeBegin < time
+    const finished = decoratedNode.x.timeEnd < time
 
     // Don't include node before its timeBegin
-    if (decoratedNode.x.timeBegin > time) {
+    if (!started) {
         return null
     }
 
@@ -18,7 +20,8 @@ const getTweenNode = (
         decoratedNode,
         {
             x: getTween(decoratedNode.x, time),
-            y: getTween(decoratedNode.y, time)
+            y: getTween(decoratedNode.y, time),
+            inPosition: finished
         }
     )
 }

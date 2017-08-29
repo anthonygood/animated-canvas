@@ -1,9 +1,12 @@
 const {
     CIRCLE_RADIUS,
-    BACKGROUND_PRIMARY_COLOUR
+    BACKGROUND_PRIMARY_COLOUR,
+    FONT
 } = require('../constants')
 
 const renderNode = (context, graph, node) => {
+    if (!node.inPosition) { return }
+
     const fill = context.fillStyle
     context.beginPath()
     context.arc(
@@ -18,9 +21,9 @@ const renderNode = (context, graph, node) => {
     context.closePath()
 
     context.textAlign = 'center'
-    context.font = '24px sans-serif'
+    context.font = FONT
     context.fillStyle = BACKGROUND_PRIMARY_COLOUR
-    context.fillText(node.value, node.x, node.y + 7)
+    // context.fillText(node.value, node.x, node.y + 7)
     context.fillStyle = fill
 }
 

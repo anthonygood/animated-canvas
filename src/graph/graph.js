@@ -28,7 +28,6 @@ const reduce  = require('./reduce')
 
 const getConnectedNodes = (graph, nodeId) => {
     const isConnected = R.curry(isNodeConnectedTo)(nodeId)
-
     return graph.filter(isConnected)
 }
 
@@ -54,18 +53,28 @@ const connectNodeTo = (node, ...otherNodes) => {
     )
 }
 
+const sample = array => array[
+    Math.floor(
+        Math.random() * array.length
+    )
+]
+
 const addConnectedNodes = (graph, ...nodeValues) => {
     const makeNewConnectedNode = R.curry(nodeForValueAndIndex)(graph)
     const newNodes = nodeValues.map(makeNewConnectedNode)
 
-    const oldLastNode = graph[graph.length-1]
+    const oldLastNode = sample(graph)
     const newLastNode = connectNodeTo(oldLastNode, ...newNodes)
-    const graphWithoutLastNode = graph.slice(0, graph.length - 1)
+    const oldNodeIndex = oldLastNode && oldLastNode.id || 0
 
-    return graphWithoutLastNode.concat(
-        newLastNode,
-        newNodes
-    )
+    const newGraph = graph
+        .slice(0, oldNodeIndex)
+        .concat(newLastNode)
+        .concat(
+            graph.slice(oldNodeIndex+1, graph.length)
+        )
+
+    return newGraph.concat(newNodes)
 }
 
 const mapRows = (graph, fn) => {
