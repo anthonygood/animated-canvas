@@ -18,7 +18,9 @@ const getTweenNode = (
         decoratedNode,
         {
             x: getTween(decoratedNode.x, time),
-            y: getTween(decoratedNode.y, time)
+            y: getTween(decoratedNode.y, time),
+            inPosition: time >= decoratedNode.x.timeEnd,
+            timeSinceInPosition: time - decoratedNode.x.timeEnd
         }
     )
 }

@@ -73,7 +73,7 @@ const animate = () => {
     }
 
     drawFrame()
-    setTimeout(animate, 100)
+    requestAnimationFrame(animate)
 }
 
 animate()
