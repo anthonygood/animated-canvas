@@ -40,12 +40,13 @@ const decorateGraphWithCoordinates = (
         originY = 0,
         offsetX = 0,
         offsetY = 100,
-        marginX = 50
+        marginX = 50,
+        marginY = 0
     },
     nodeArray
 ) => {
     const decorate = R.curry(decorateNode)(
-        { originX, originY, offsetX, offsetY, marginX }
+        { originX, originY, offsetX, offsetY, marginX, marginY }
     )
 
     return map(nodeArray, decorate)

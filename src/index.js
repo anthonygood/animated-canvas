@@ -24,13 +24,25 @@ document.querySelector('body').appendChild(canvas)
 
 const ctx = canvas.getContext('2d')
 
+// standard top-down tree
+// const options = {
+//     originX: 500,
+//     originY: 30,
+//     offsetX: 0,
+//     offsetY: 100,
+//     marginX: 100
+// }
+
+// left-to-right tree
 const options = {
-    originX: 500,
-    originY: 30,
-    offsetX: 0,
-    offsetY: 125,
-    marginX: 100
+    originX: 50,
+    originY: 300,
+    offsetX: 100,
+    offsetY: 0,
+    marginX: 0,
+    marginY: 100
 }
+
 
 const decorate = R.curry(decorateGraphWithCoordinates)(options)
 const render   = R.curry(renderNodes)(ctx)

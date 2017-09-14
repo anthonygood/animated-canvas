@@ -5,21 +5,29 @@ const {
 
 const applyParentalOffsets = (
     {
-        originX = 0
+        originX = 0,
+        originY = 0,
+        offsetX = 0,
+        offsetY = 0,
     },
     nodeArray
 ) => {
     return reduce(nodeArray, (graph, node) => {
+        const axis = offsetY > offsetX ? 'x' : 'y'
         const connected = getConnectedNodes(graph, node.id)
         const parent    = connected.filter(connectedNode => connectedNode.id < node.id)[0]
 
         if (!parent) { return graph.concat(node) }
 
-        const parentOffset = parent.x - originX
+        const axisOrigin = axis === 'x' ? originX : originY
+        const parentOffset = parent[axis] - axisOrigin
+
         const thisNode = Object.assign(
             {},
             node,
-            { x: node.x + parentOffset }
+            {
+                [axis]: node[axis] + parentOffset
+            }
         )
 
         return graph.concat(thisNode)
